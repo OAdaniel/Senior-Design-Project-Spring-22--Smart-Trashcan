@@ -1,0 +1,40 @@
+<!-- ESP Smart trashcan firebase web app-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ESP Firebase SMART TRASHCAN App</title>
+
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+
+    <!-- TODO: Add SDKs for Firebase products that you want to use
+        https://firebase.google.com/docs/web/setup#available-libraries -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-messaging.js"></script>
+
+    <script>
+    // REPLACE WITH YOUR web app's Firebase configuration
+    var firebaseConfig = {
+         apiKey: "AIzaSyCiBFg77_NsgLK2p0ZQeT_fDWlgUQ2_62g",
+         authDomain: "esp32-web-smart-trashcan.firebaseapp.com",
+         databaseURL: "https://esp32-web-smart-trashcan-default-rtdb.firebaseio.com",
+         projectId: "esp32-web-smart-trashcan",
+         storageBucket: "esp32-web-smart-trashcan.appspot.com",
+         messagingSenderId: "133964217426",
+         appId: "1:133964217426:web:8103088e9792088f79b38b"
+    };
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    var database = firebase.database();
+</script>
+<script src="app.js" defer></script>
+
+</head>
+<body>
+    <h1>ESP32 Firebase SMART TRASHCAN READINGS</h1>
+    <p>Air Quality: <span id="airQuality"></span> ppt</p>
+    <p>Depth: <span id="depth"></span> cm</p>
+</body>
+</html>
