@@ -1,64 +1,24 @@
-/*var dataFloatPath = 'Device1/depth';
-var dataIntPath = 'Device1/airQuality';
-
-// Get a database reference 
-const databaseFloat = database.ref(dataFloatPath);
-const databaseInt = database.ref(dataIntPath);
-
-// Variables to save database current values
-var floatReading;
-var intReading;
-
-// Attach an asynchronous callback to read the data
-databaseFloat.on('value', (snapshot) => {
-  floatReading = snapshot.val();
-  //console.log(floatReading);
-  document.getElementById("depth").innerHTML = floatReading;
-}, (errorObject) => {
-  console.log('The read failed: ' + errorObject.name);
-});
-
-/*databaseInt.on('value', (snapshot) => {
-  intReading = snapshot.val();
-  console.log(intReading);
-  document.getElementById("airQuality").innerHTML = intReading;
-}, (errorObject) => {
-  console.log('The read failed: ' + errorObject.name);
-});
-*/
-
-
 // Variables to save database current values
 
+// To dispay the real time depth and airquality of on the web app
 var randomId;
 var airQualityVal;
-var commentsRef = firebase.database().ref('Device1/airQuality');
+var depthVal;
+var commentsRef = firebase.database().ref('Device1');
 commentsRef.on('child_added', (data) => {
 
   //addCommentElement(postElement, data.key, data.val().text, data.val().author);
 
-  airQualityVal = data.val();
+  airQualityVal = Object.values(data.val())[0];
+  depthVal = Object.values(data.val())[1];
   randomId = data.key;
   //console.log(randomId);
   document.getElementById("airQuality").innerHTML = airQualityVal;
-}, (errorObject) => {
-  console.log('The read failed: ' + errorObject.name);
-});
-
-var randomId2;
-var depthval;
-var commentsRef = firebase.database().ref('Device1/depth');
-commentsRef.on('child_added', (data) => {
-
-  //addCommentElement(postElement, data.key, data.val().text, data.val().author);
-
-  depthVal = data.val();
-  randomId2 = data.key;
-  //console.log(randomId2);
   document.getElementById("depth").innerHTML = depthVal;
 }, (errorObject) => {
   console.log('The read failed: ' + errorObject.name);
 });
+
 
 //https://www.youtube.com/watch?v=BsCBCudx58g
 //for the messaging side first create a messagiing obj with all the funstionalities
