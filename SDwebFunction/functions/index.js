@@ -3,6 +3,9 @@ const admin = require("firebase-admin");
 
 admin.initializeApp();
 
+//function to prepare for sending message
+require('dotenv').config();
+
 //function to just store message received 
 exports.inboundSMS = functions.https.onRequest(async (req, res) => {
 let params;
@@ -15,9 +18,6 @@ let params;
     await admin.database().ref('/msgq').push(params);
     res.sendStatus(200);
 })
-
-//function to prepare for sending message
-require('dotenv').config();
 
 //const functions = require('firebase-functions');
 //const admin = require('firebase-admin');
@@ -39,7 +39,7 @@ exports.sendSMS = functions.database
   .onCreate(async (message) => {
     const { msisdn, text, to } = message.val();
     const result = await new Promise((resolve, reject) => {
-      vonage.message.sendSms(msisdn, to, `You sent the following text: ${text}`, (err, responseData) => {
+      vonage.message.sendSms('+'+msisdn, to, `You sent the following text: ${text}`, (err, responseData) => {
         if (err) {
           return reject(new Error(err));
         } else {
@@ -61,3 +61,47 @@ exports.sendSMS = functions.database
   });
 
 
+//Twilio
+  const accountSid = process.env.TWILIO_ACCOUNT_SID;
+  const authToken =  process.env.TWILIO_AUTH_TOKEN;
+
+  const client = require('twilio')("AC50b398c8448c318dbf5654f744f98e53","1da20f3cb51d80a8c53d448ab3c1f9e0");
+  const twilioNumber = '+19106139872'
+
+  exports.rtdbSendMsg = functions.database
+  .ref('/Device1/{pushId}')
+  .onCreate(async (currVals) => {
+    const { airQuality, depth } = currVals.val();
+
+    if(depth<=10 || airQuality >= 1000){
+
+      
+      return admin.database()
+      .ref('/msgq/{msgPushId}')
+      .once('value')
+      .then(snapshot => snapshot.val())
+      .then(msgq => {
+          //const phoneNumber = '+'+msgq.msisdn;
+          const phoneNumber = '+16012148020'
+
+          if ( !validE164(phoneNumber) ) {
+              throw new Error('number must be E164 format!')
+          }
+
+          const textMessage = {
+              body: `The Trashcan needs to be emptied`,
+              to: phoneNumber,  // Text to this number
+              from: twilioNumber // From a valid Twilio number
+          }
+
+          return client.messages.create(textMessage)
+      })
+      .then(message => console.log(message.sid, 'success'))
+      .catch(err => console.log(err))
+    }
+  });
+
+
+function validE164(num) {
+  return /^\+?[1-9]\d{1,14}$/.test(num)
+}
