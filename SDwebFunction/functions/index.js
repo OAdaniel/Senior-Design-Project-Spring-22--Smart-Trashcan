@@ -65,7 +65,8 @@ exports.sendSMS = functions.database
   const accountSid = process.env.TWILIO_ACCOUNT_SID;
   const authToken =  process.env.TWILIO_AUTH_TOKEN;
 
-  const client = require('twilio')("AC50b398c8448c318dbf5654f744f98e53","1da20f3cb51d80a8c53d448ab3c1f9e0");
+  //const client = require('twilio')(accountSid,authToken);
+  const client = require('twilio')("XXXXXXXX","XXXXXXXXX");
   const twilioNumber = '+19106139872'
 
   exports.rtdbSendMsg = functions.database
